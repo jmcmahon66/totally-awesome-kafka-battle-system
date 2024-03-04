@@ -1,6 +1,6 @@
 version: '3'
 services:
-  battle_main:
+  app:
     build: .
     volumes: 
       - .:/app
