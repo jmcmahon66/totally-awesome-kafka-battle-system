@@ -1,7 +1,7 @@
 from character import Character
 from config import *
 from helper import *
-from main import battle
+from main import Battle
 import random
 
 # lower_damage = 5
@@ -42,9 +42,16 @@ def test_character_health_limit():
     assert enemy.health == 0  # enemy health should not go below 0
 
 def test_battle():
-    hero = Character(name="Hero", health=100, damage=10)
-    enemy = Character(name="Enemy", health=90, damage=5)
+    heroDamage = randomise_damage()
+    enemyDamage = randomise_damage()
+
+    hero = Character(name="Hero", health=100, damage=heroDamage) 
+    enemy = Character(name="Enemy", health=100, damage=enemyDamage)
     
     # Test battle function
-    battle(hero, enemy)
-    assert hero.health >= 0 or enemy.health >= 0  # At least one character should have health greater than 0 after battle
+    battle = Battle(hero, enemy)
+    battle.run()
+    assert (
+        (hero.health > 0 and enemy.health >= 0) or
+        (enemy.health > 0 and hero.health >= 0)
+    ), "At least one character should have health greater than 0 after battle"
