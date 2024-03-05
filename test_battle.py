@@ -1,12 +1,14 @@
 from character import Character
+from config import *
+from helper import *
 from main import battle
 import random
 
-lower_damage = 5
-upper_damager = 15
+# lower_damage = 5
+# upper_damager = 15
 
-def randomise_damage():
-    return random.randint(lower_damage, upper_damager)
+# def randomise_damage():
+#     return random.randint(lower_damage, upper_damager)
 
 def test_randomise_damage():
     for i in range(20):

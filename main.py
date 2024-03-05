@@ -1,7 +1,8 @@
 import time
 import logging
-from helper import myfunction
+from helper import *
 from character import Character
+from config import *
 # import sys
 
 logging.basicConfig(level=logging.DEBUG) #, stream=sys.stdout)
@@ -14,10 +15,10 @@ i = 0
 # class Enemy:
 #     def __init__(self, )
 
-hero = Character(name = "Hero", health = 100, damage = 10)
-enemy = Character(name = "Enemy", health = 90, damage = 5)
+# hero = Character(name = "Hero", health = 100, damage = 10)
+# enemy = Character(name = "Enemy", health = 90, damage = 5)
 
-def battle():
+def battle(hero, enemy):
     global i
     while True:
         hero.attack(enemy)
@@ -36,7 +37,10 @@ def battle():
         i += 1
 
 if __name__ == '__main__':
-    battle()
+    hero = Character(name = "Hero", health = 100, damage = 10)
+    enemy = Character(name = "Enemy", health = 90, damage = 5)
+
+    battle(hero, enemy)
 
     # while i < 5:
     #     i += 1
