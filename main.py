@@ -3,6 +3,7 @@ import logging
 from helper import *
 from character import Character
 from config import *
+from weapons import create_weapons
 
 # logging.basicConfig(level=logging.DEBUG)
 # logger = logging.getLogger(__name__)
@@ -11,7 +12,7 @@ class Battle:
     def __init__(self, hero: Character, enemy: Character) -> None:
         self.hero = hero
         self.enemy = enemy
-        self.turn = 0
+        self.turn = 1
 
     def run(self) -> None:
         while True:
@@ -33,11 +34,14 @@ class Battle:
             self.turn += 1
 
 if __name__ == '__main__':
-    heroDamage = randomise_damage()
-    enemyDamage = randomise_damage()
+    weapons = create_weapons()
+    hero_weapon = random.choice(weapons)
+    enemy_weapon = random.choice(weapons)
+    print(f"Hero weapon: {hero_weapon.name}")
+    print(f"Enemy weapon: {enemy_weapon.name}")
 
-    hero = Character(name = "Hero", health = 100, damage = heroDamage)
-    enemy = Character(name = "Enemy", health = 90, damage = enemyDamage)
+    hero = Character(name = "Hero", health = 100, weapon = hero_weapon)
+    enemy = Character(name = "Enemy", health = 100, weapon = enemy_weapon)
 
     battle = Battle(hero, enemy)
     battle.run()

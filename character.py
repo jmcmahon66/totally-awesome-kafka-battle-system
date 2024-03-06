@@ -1,9 +1,15 @@
+from weapons import *
+import random
+
 class Character:
-    def __init__(self, name: str, health: int, damage: int) -> None:
+    def __init__(self, name: str, health: int, weapon: Weapon) -> None:
         self.name = name # This is telling the code we want to assign values to the object
         self.health = health
-        self.damage = damage
+        self.weapon = weapon
+        # self.damage = damage
 
     def attack(self, target) -> None:
-        target.health -= self.damage
+        damage = random.randint(self.weapon.min_damage, self.weapon.max_damage)
+        print(f"{self.weapon.name} does {damage} to {target.name}")
+        target.health -= damage
         target.health = max(target.health, 0)
