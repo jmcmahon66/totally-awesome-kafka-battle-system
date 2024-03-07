@@ -1,4 +1,5 @@
-def myfunction() -> None:
+import random
+from config import *
 
-    return f"calling module function"
-    # logger.debug("calling module function")
+# def randomise_damage():
+#     return random.randint(lower_damage, upper_damage)
