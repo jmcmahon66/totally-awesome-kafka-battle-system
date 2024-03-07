@@ -16,13 +16,13 @@ def create_weapons():
 
     spear = Weapon(name="Spear",
                min_damage=5,
-               max_damage=15,
+               max_damage=16,
                value=6)
 
     axe = Weapon(name="Axe",
              min_damage=9,
              max_damage=14,
-             value=8)
+             value=7)
     
     return [sword, spear, axe]
 
