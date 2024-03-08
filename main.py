@@ -29,7 +29,7 @@ def delivery_callback(err, msg):
         print("Produced event to topic {topic}: key = {key:12} value = {value:12}".format(
             topic=msg.topic(), key=msg.key().decode('utf-8'), value=msg.value().decode('utf-8')))
 
-# Set up a callback to handle the '--reset' flag. - needs args!
+# Set up a callback to handle the '--reset' flag. - optional(args)?
 def reset_offset(consumer, partitions):
     # if args.reset:
     for p in partitions:
@@ -48,23 +48,29 @@ class Battle:
     def run(self) -> None:
         while True:
             print(f"==== Turn: {self.turn} ====")
+            topic = "battle"
+            producer.produce(topic, key="turn", value=str(self.turn))
 
             print(f"Hero health: {self.hero.health}")
             print(f"Enemy health: {self.enemy.health}")
             
             self.hero.attack(self.enemy)
             if self.enemy.health <= 0:
+                winner = "Hero"
                 print("Hero wins!")
                 break
             
             self.enemy.attack(self.hero)
             if self.hero.health <= 0:
+                winner = "Enemy"
                 print("Enemy wins!")
                 break
                 
             self.turn += 1
         
-        producer.produce(topic, key="key3", value="value11", callback=delivery_callback)
+        producer.produce(topic, key="turn", value=f"ended after {self.turn} turns - {winner.upper()} WINS!")
+
+        # producer.produce(topic, key="key3", value="value11", callback=delivery_callback)
         consumer.subscribe([topic], on_assign=reset_offset) 
 
         try:
