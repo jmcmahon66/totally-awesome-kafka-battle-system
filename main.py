@@ -13,6 +13,7 @@ bootstrap_servers = 'kafka:9092'
 topic_hero_actions = 'hero_actions'
 topic_enemy_actions = 'enemy_actions'
 topic = "topic_new"
+turn_time = 5  # seconds
 
 conf = {'bootstrap.servers': bootstrap_servers,
         'client.id': socket.gethostname(),
@@ -67,6 +68,7 @@ class Battle:
                 break
                 
             self.turn += 1
+            time.sleep(turn_time)
         
         producer.produce(topic, key="turn", value=f"ended after {self.turn} turns - {winner.upper()} WINS!")
 
@@ -75,7 +77,7 @@ class Battle:
 
         try:
             while True:
-                msg = consumer.poll(1.0)
+                msg = consumer.poll(10.0)
                 if msg is None:
                     # Initial message consumption may take up to
                     # `session.timeout.ms` for the consumer group to
