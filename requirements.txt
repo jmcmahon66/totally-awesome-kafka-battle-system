@@ -1,3 +1,4 @@
 pytest
 # kafka-python
 confluent-kafka
+# confluent-kafka-admin
