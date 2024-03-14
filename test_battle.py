@@ -6,9 +6,9 @@ from weapons import create_weapons
 import random
 import pytest
 
-def run_main():
-    battle = Battle()
-    battle.run()
+# def run_main():
+#     battle = Battle()
+#     battle.run()
 
 # @pytest.fixture
 # def characters_and_weapons():
