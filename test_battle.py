@@ -6,9 +6,9 @@
 # import random
 # import pytest
 
-# def run_main():
-#     battle = Battle()
-#     battle.run()
+def run_main():
+    assert 1 > 0
+    # battle.run()
 
 # @pytest.fixture
 # def characters_and_weapons():
