@@ -6,7 +6,7 @@
 # import random
 # import pytest
 
-def run_main():
+def test_main():
     assert 1 > 0
     # battle.run()
 
