@@ -1,10 +1,10 @@
-from character import Character
-from config import *
-from helper import *
-from battle.main import Battle
-from weapons import create_weapons
-import random
-import pytest
+# from character import Character
+# from config import *
+# from helper import *
+# from battle.main import Battle
+# from weapons import create_weapons
+# import random
+# import pytest
 
 # def run_main():
 #     battle = Battle()
