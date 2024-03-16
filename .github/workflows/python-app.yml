@@ -42,6 +42,9 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+
     - name: Configure AWS Credentials
       uses: aws-actions/configure-aws-credentials@v1
       with: 
@@ -60,7 +63,6 @@ jobs:
         ECR_REPOSITORY: python_practice_repo-battle
         IMAGE_TAG: latest
       run: |
-        cd battle
-        docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG -f .
+        docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG -f "dockerfile.battle" .
         docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
 
