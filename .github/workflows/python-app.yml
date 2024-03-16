@@ -60,6 +60,7 @@ jobs:
         ECR_REPOSITORY: python_practice_repo-battle
         IMAGE_TAG: latest
       run: |
-        docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG -f "dockerfile.battle" .
+        cd battle
+        docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG -f .
         docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
 
