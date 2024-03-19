@@ -64,5 +64,6 @@ jobs:
         IMAGE_TAG: latest
       run: |
         docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG -f "dockerfile.battle" .
+        docker images
         docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
 
