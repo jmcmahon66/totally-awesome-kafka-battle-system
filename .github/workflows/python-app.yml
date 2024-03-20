@@ -4,11 +4,17 @@
 name: Python application
 
 on:
+  workflow_dispatch:
+    inputs:
+      run-workflow:
+        description: 'Run the workflow'
+        required: false
+        default: 'yes'
   push:
     branches:
     - main
     - feature/*
-    - infra/*
+    # - infra/*
   pull_request:
     branches: [ "main" ]
 
