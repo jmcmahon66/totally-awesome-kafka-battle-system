@@ -1,0 +1,36 @@
+name: deploy aws infra
+env: 
+    AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+    AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
+on:
+  workflow_dispatch:
+    inputs:
+      run-workflow:
+        description: 'Run the workflow'
+        required: false
+        default: 'yes'
+  push:
+    branches:
+    - infra/
+
+jobs:
+  deploy_ecs_tf:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+        working-directory: ./terraform
+    steps: 
+    - uses: actions/checkout@v4
+
+    - uses: hashicorp/setup-terraform@v3
+
+    - name: Terraform fmt
+      id: fmt
+      run: terraform fmt -check
+      continue-on-error: true
+  
+    - name: Terraform Init
+      id: init
+      run: terraform init
