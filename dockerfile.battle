@@ -1,4 +1,4 @@
-FROM python:3 
+FROM python:3.8-slim AS base
 # python:3.8-slim
 
 WORKDIR /app
@@ -14,6 +14,7 @@ COPY helper.py /app
 COPY character.py /app
 RUN ls /app > /app/out.txt
 
+FROM base as development
 # RUN pip install nodemon
 # Use nodemon for watching dir and hot-reloading
 RUN apt-get update
@@ -24,3 +25,5 @@ RUN npm i -g nodemon
 # CMD ["python", "main.py"]
 CMD ["nodemon", "--exec", "python", "battle/main.py"]
 
+FROM base as production
+CMD ["python", "battle/main.py"]

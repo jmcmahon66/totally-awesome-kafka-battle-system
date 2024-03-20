@@ -66,7 +66,7 @@ jobs:
         ECR_REPOSITORY: python-kafka-battle
         IMAGE_TAG: latest
       run: |
-        docker build -t "$ECR_REGISTRY/$REGISTRY_ALIAS/$ECR_REPOSITORY:$IMAGE_TAG" -f "dockerfile.battle" .
+        docker build -t "$ECR_REGISTRY/$REGISTRY_ALIAS/$ECR_REPOSITORY:$IMAGE_TAG" -f "dockerfile.battle" --target production .
         docker images
         docker push "$ECR_REGISTRY/$REGISTRY_ALIAS/$ECR_REPOSITORY:$IMAGE_TAG"
 
