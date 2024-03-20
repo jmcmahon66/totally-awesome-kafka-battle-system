@@ -50,10 +50,10 @@ jobs:
       with: 
         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        aws-region: us-east-1 #eu-west-1
+        aws-region: us-east-1  # Region of aws ecr login is us-east-1
     
     - name: Login to AWS ECR
-      id: login-ecr-public
+      id: login-ecr-public  # use -public for public ecr
       uses: aws-actions/amazon-ecr-login@v2
       with:
         registry-type: public
@@ -62,7 +62,7 @@ jobs:
       id: build-battle-image
       env:
         ECR_REGISTRY: ${{ steps.login-ecr-public.outputs.registry }}
-        REGISTRY_ALIAS: d1l1c0i8
+        REGISTRY_ALIAS: d1l1c0i8  # public registry alias
         ECR_REPOSITORY: python-kafka-battle
         IMAGE_TAG: latest
       run: |
