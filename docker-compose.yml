@@ -4,6 +4,7 @@ services:
     build:
       context: ./
       dockerfile: dockerfile.battle
+      target: development
     volumes: 
       - .:/app  # mount local dir as volume
       - ./battle/:/app/main
@@ -14,6 +15,7 @@ services:
     build: 
       context: ./
       dockerfile: dockerfile.character
+      target: development
     volumes: 
       - .:/app
       - ./character/:/app/character

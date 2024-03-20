@@ -8,6 +8,7 @@ on:
     branches:
     - main
     - feature/*
+    - infra/*
   pull_request:
     branches: [ "main" ]
 
@@ -15,10 +16,8 @@ permissions:
   contents: read
 
 jobs:
-  build:
-
+  test:
     runs-on: ubuntu-latest
-
     steps:
     - uses: actions/checkout@v3
     - name: Set up Python 3.10
@@ -39,3 +38,49 @@ jobs:
     - name: Test with pytest
       run: |
         pytest
+
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+
+    - name: Configure AWS Credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with: 
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: us-east-1  # Region of aws ecr login is us-east-1
+    
+    - name: Login to AWS ECR
+      id: login-ecr-public  # use -public for public ecr
+      uses: aws-actions/amazon-ecr-login@v2
+      with:
+        registry-type: public
+
+    - name: Build, tag and push python-kafka-battle to ECR
+      id: build-battle-image
+      env:
+        ECR_REGISTRY: ${{ steps.login-ecr-public.outputs.registry }}
+        REGISTRY_ALIAS: d1l1c0i8  # public registry alias
+        ECR_REPOSITORY: python-kafka-battle
+        IMAGE_TAG: latest
+      run: |
+        docker build -t "$ECR_REGISTRY/$REGISTRY_ALIAS/$ECR_REPOSITORY:$IMAGE_TAG" -f "dockerfile.battle" --target production .
+        docker images
+        docker push "$ECR_REGISTRY/$REGISTRY_ALIAS/$ECR_REPOSITORY:$IMAGE_TAG"
+
+    - name: Build, tag and push python-kafka-hero to ECR
+      id: build-hero-image
+      env:
+        ECR_REGISTRY: ${{ steps.login-ecr-public.outputs.registry }}
+        REGISTRY_ALIAS: d1l1c0i8
+        ECR_REPOSITORY: python-kafka-hero
+        IMAGE_TAG: latest
+      run: |
+        docker build -t "$ECR_REGISTRY/$REGISTRY_ALIAS/$ECR_REPOSITORY:$IMAGE_TAG" -f "dockerfile.character" --target production .
+        docker images
+        docker push "$ECR_REGISTRY/$REGISTRY_ALIAS/$ECR_REPOSITORY:$IMAGE_TAG"
+
+      #        IMAGE_TAG: ${github.sha }}
+

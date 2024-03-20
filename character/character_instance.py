@@ -47,7 +47,7 @@ startup = True
 #     logger.debug("DONE WAITING STARTUP")
 
 consumer = Consumer(hero_kafka_conf)
-consumer.subscribe([battle_topic], on_assign=reset_offset) # subscribe to 'battle' for turns
+consumer.subscribe([battle_topic]) #, on_assign=reset_offset) # subscribe to 'battle' for turns
 
 producer = Producer(kafka_conf)
 
