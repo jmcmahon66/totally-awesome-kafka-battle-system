@@ -15,6 +15,7 @@ services:
     build: 
       context: ./
       dockerfile: dockerfile.character
+      target: development
     volumes: 
       - .:/app
       - ./character/:/app/character

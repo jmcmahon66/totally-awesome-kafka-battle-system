@@ -58,8 +58,8 @@ jobs:
       with:
         registry-type: public
 
-    - name: Build, tag and push image to ECR
-      id: build-image
+    - name: Build, tag and push python-kafka-battle to ECR
+      id: build-battle-image
       env:
         ECR_REGISTRY: ${{ steps.login-ecr-public.outputs.registry }}
         REGISTRY_ALIAS: d1l1c0i8
@@ -67,6 +67,18 @@ jobs:
         IMAGE_TAG: latest
       run: |
         docker build -t "$ECR_REGISTRY/$REGISTRY_ALIAS/$ECR_REPOSITORY:$IMAGE_TAG" -f "dockerfile.battle" --target production .
+        docker images
+        docker push "$ECR_REGISTRY/$REGISTRY_ALIAS/$ECR_REPOSITORY:$IMAGE_TAG"
+
+    - name: Build, tag and push python-kafka-hero to ECR
+      id: build-hero-image
+      env:
+        ECR_REGISTRY: ${{ steps.login-ecr-public.outputs.registry }}
+        REGISTRY_ALIAS: d1l1c0i8
+        ECR_REPOSITORY: python-kafka-hero
+        IMAGE_TAG: latest
+      run: |
+        docker build -t "$ECR_REGISTRY/$REGISTRY_ALIAS/$ECR_REPOSITORY:$IMAGE_TAG" -f "dockerfile.character" --target production .
         docker images
         docker push "$ECR_REGISTRY/$REGISTRY_ALIAS/$ECR_REPOSITORY:$IMAGE_TAG"
 
