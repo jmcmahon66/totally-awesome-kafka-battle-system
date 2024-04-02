@@ -5,9 +5,9 @@ print(sys.path)
 from character import Character
 from config import *
 import logging
-import time
+# import time
 import random
-from weapons import create_weapons
+# from weapons import create_weapons
 
 from confluent_kafka import Producer, Consumer, OFFSET_BEGINNING #, AdminClient
 from confluent_kafka.admin import AdminClient
@@ -47,7 +47,7 @@ startup = True
 #     logger.debug("DONE WAITING STARTUP")
 
 consumer = Consumer(hero_kafka_conf)
-consumer.subscribe([battle_topic]) #, on_assign=reset_offset) # subscribe to 'battle' for turns
+consumer.subscribe([battle_topic]) # , on_assign=reset_offset) # subscribe to 'battle' for turns
 
 producer = Producer(kafka_conf)
 
@@ -64,6 +64,8 @@ def do_action(turn):
         producer.produce(character_name, key="action", value=f"turn {turn} - hero deals {hero_damage} damage to enemy") #str(self.turn))
         producer.produce("enemy", key="action", value=f"turn {turn} - enemy deals {enemy_damage} damage to hero") #str(self.turn))
 
+turn = ""
+
 while True:
     try:
         while True:
@@ -72,8 +74,14 @@ while True:
                 # Initial message consumption may take up to
                 # `session.timeout.ms` for the consumer group to
                 # rebalance and start consuming
-                logger.debug("Waiting for turn...")
-                print("Waiting for turn...")
+                if turn:
+                    next_turn = int(turn) + 1
+                    # next_turn_str = str(next_turn)
+                    logger.debug(f"Waiting for turn {next_turn}...")
+                    print(f"Waiting for turn {next_turn}...")
+                else:
+                    logger.debug("Waiting for first turn...")
+                    print("Waiting for first turn 1")
             elif msg.error():
                 logger.debug("ERROR: %s".format(msg.error()))
                 print("ERROR: %s".format(msg.error()))

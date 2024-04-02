@@ -72,8 +72,8 @@ def consumer_get_value(topic, turn, action, consumer):
     while True:
         msg = consumer.poll(1.0)
         if msg is None:
-            logger.debug(f"Waiting for {topic} action...")
-            print(f"Waiting for {topic} action...")
+            logger.debug(f"Waiting for {topic} action for turn {turn}...")
+            print(f"Waiting for {topic} action for turn {turn}...")
         else:
             msg_value = msg.value().decode('utf-8')
             logger.debug(f"GOT MESSAGE: {msg_value}")
