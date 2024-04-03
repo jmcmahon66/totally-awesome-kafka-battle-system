@@ -68,7 +68,7 @@ jobs:
       id: build-battle-image
       env:
         ECR_REGISTRY: ${{ steps.login-ecr-public.outputs.registry }}
-        REGISTRY_ALIAS: d1l1c0i8  # public registry alias
+        REGISTRY_ALIAS: ${{ vars.REGISTRY_ALIAS }}  # public registry alias
         ECR_REPOSITORY: python-kafka-battle
         IMAGE_TAG: latest
       run: |
@@ -80,7 +80,7 @@ jobs:
       id: build-hero-image
       env:
         ECR_REGISTRY: ${{ steps.login-ecr-public.outputs.registry }}
-        REGISTRY_ALIAS: d1l1c0i8
+        REGISTRY_ALIAS: ${{ vars.REGISTRY_ALIAS }}
         ECR_REPOSITORY: python-kafka-hero
         IMAGE_TAG: latest
       run: |

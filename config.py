@@ -18,3 +18,8 @@ hero_kafka_conf = {'bootstrap.servers': bootstrap_servers,
         'auto.offset.reset': "earliest", #"earliest/latest",    
         }
 
+enemy_kafka_conf = {'bootstrap.servers': bootstrap_servers,
+        'client.id': socket.gethostname(),
+        'group.id': "enemy",
+        'auto.offset.reset': "earliest", #"earliest/latest",    
+        }

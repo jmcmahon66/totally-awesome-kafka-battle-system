@@ -1,7 +1,7 @@
 import sys
 sys.path.append("/app")  # Add parent directory to search path
 print(sys.path)
-
+import os
 from character import Character
 from config import *
 import logging
@@ -10,13 +10,31 @@ import random
 # from weapons import create_weapons
 
 from confluent_kafka import Producer, Consumer, OFFSET_BEGINNING #, AdminClient
-from confluent_kafka.admin import AdminClient
+# from confluent_kafka.admin import AdminClient
 
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 
+# Set container's role in battle
+character_selection = os.environ.get('CHAR_SELECTION')
+
+if character_selection == 'hero':
+    kafka_conf = hero_kafka_conf
+    target = "enemy"
+    logger.debug("EXECUTING HERO CODE")
+    print("EXECUTING HERO CODE")
+elif character_selection == 'enemy':
+    kafka_conf = enemy_kafka_conf
+    target = "hero"
+    logger.debug("EXECUTING ENEMY CODE")
+    print("EXECUTING ENEMY CODE")
+else:
+    logger.debug("Unrecognised character type - exiting")
+    print("Unrecognised character type - exiting")
+    exit(1)
+
 # topic = "battle"
-character_name = "hero"
+character_name = character_selection
 # consumer = Consumer(hero_kafka_conf)
 
 def reset_offset(consumer, partitions):
@@ -46,7 +64,7 @@ startup = True
 #     startup = False
 #     logger.debug("DONE WAITING STARTUP")
 
-consumer = Consumer(hero_kafka_conf)
+consumer = Consumer(kafka_conf)
 consumer.subscribe([battle_topic]) # , on_assign=reset_offset) # subscribe to 'battle' for turns
 
 producer = Producer(kafka_conf)
@@ -54,15 +72,17 @@ producer = Producer(kafka_conf)
 def do_action(turn):
     logger.debug(f"Doing action for turn {turn}")
 
-    hero_damage = random.randint(10, 15)
-    enemy_damage = random.randint(10, 15)
+    # TODO: Equip weapon and generate damage from it
+    damage = random.randint(10, 15)
+    # enemy_damage = random.randint(10, 15)
 
     if "ended" in turn:
         producer.produce(character_name, key="action", value=f"{turn}")
-        producer.produce("enemy", key="action", value=f"{turn}")
+        # producer.produce("enemy", key="action", value=f"{turn}")
     else:
-        producer.produce(character_name, key="action", value=f"turn {turn} - hero deals {hero_damage} damage to enemy") #str(self.turn))
-        producer.produce("enemy", key="action", value=f"turn {turn} - enemy deals {enemy_damage} damage to hero") #str(self.turn))
+        logger.debug(f"turn {turn} - {character_name} deals {damage} damage to {target}")
+        producer.produce(character_name, key="action", value=f"turn {turn} - {character_name} deals {damage} damage to {target}") #str(self.turn))
+        # producer.produce("enemy", key="action", value=f"turn {turn} - enemy deals {enemy_damage} damage to hero") #str(self.turn))
 
 turn = ""
 
@@ -81,7 +101,7 @@ while True:
                     print(f"Waiting for turn {next_turn}...")
                 else:
                     logger.debug("Waiting for first turn...")
-                    print("Waiting for first turn 1")
+                    print("Waiting for first turn")
             elif msg.error():
                 logger.debug("ERROR: %s".format(msg.error()))
                 print("ERROR: %s".format(msg.error()))

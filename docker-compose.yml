@@ -21,6 +21,21 @@ services:
       - ./character/:/app/character
     depends_on:
       - battle
+    environment:
+      - CHAR_SELECTION=hero
+
+  enemy:
+    build: 
+      context: ./
+      dockerfile: dockerfile.character
+      target: development
+    volumes: 
+      - .:/app
+      - ./character/:/app/character
+    depends_on:
+      - battle
+    environment:
+      - CHAR_SELECTION=enemy
 
   zookeeper:
     image: confluentinc/cp-zookeeper:7.3.2
